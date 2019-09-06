@@ -26,6 +26,13 @@ exec 'set rtp+='.s:home
 " 将 ~/.vim 目录加入 runtimepath (有时候 vim 不会自动帮你加入）
 set rtp+=~/.vim
 
+" 检测函数（检测光标位置处文字的样式名）
+function! <SID>SynStack()
+    echo map(synstack(line('.'),col('.')),'synIDattr(v:val, "name")')
+endfunc
+
+" 绑定检测键位（按键后样式名信息会输出在指令栏的位置）
+nnoremap <F3> :call <SID>SynStack()<CR>
 
 "----------------------------------------------------------------------
 " 模块加载

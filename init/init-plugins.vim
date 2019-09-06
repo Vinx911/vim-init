@@ -16,7 +16,7 @@
 if !exists('g:bundle_group')
 	let g:bundle_group = ['basic', 'tags', 'enhanced', 'filetypes', 'textobj']
 	let g:bundle_group += ['tags', 'airline', 'nerdtree', 'ale', 'echodoc']
-	let g:bundle_group += ['leaderf']
+	let g:bundle_group += ['leaderf', 'YouCompleteMe', 'vimcdoc']
 endif
 
 
@@ -95,7 +95,7 @@ if index(g:bundle_group, 'basic') >= 0
 	Plug 'mhinz/vim-startify'
 
 	" 一次性安装一大堆 colorscheme
-	Plug 'flazz/vim-colorschemes'
+	"Plug 'flazz/vim-colorschemes'
 
 	" 支持库，给其他插件用的函数库
 	Plug 'xolox/vim-misc'
@@ -185,6 +185,8 @@ if index(g:bundle_group, 'tags') >= 0
 
 	" 提供 ctags/gtags 后台数据库自动更新功能
 	Plug 'ludovicchabant/vim-gutentags'
+	
+	let g:gutentags_define_advanced_commands = 1
 
 	" 提供 GscopeFind 命令并自动处理好 gtags 数据库切换
 	" 支持光标移动到符号名上：<leader>cg 查看定义，<leader>cs 查看引用
@@ -315,6 +317,10 @@ if index(g:bundle_group, 'nerdtree') >= 0
 	noremap <space>no :NERDTreeFocus<cr>
 	noremap <space>nm :NERDTreeMirror<cr>
 	noremap <space>nt :NERDTreeToggle<cr>
+	
+	" 当vim只剩NERDTree窗口时使用q退出vim
+    autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
 endif
 
 
@@ -401,6 +407,13 @@ if index(g:bundle_group, 'ale') >= 0
 	endif
 endif
 
+"----------------------------------------------------------------------
+" YouCompleteMe：代码补全
+"----------------------------------------------------------------------
+if index(g:bundle_group, 'YouCompleteMe') >= 0
+    Plug 'Valloric/YouCompleteMe'
+    let g:ycm_global_ycm_extra_conf='~/.vim/.ycm_extra_conf.py'
+endif
 
 "----------------------------------------------------------------------
 " echodoc：搭配 YCM/deoplete 在底部显示函数参数
@@ -517,6 +530,14 @@ if index(g:bundle_group, 'leaderf') >= 0
 	endif
 endif
 
+"----------------------------------------------------------------------
+" vimcdoc：Vim 的中文帮助文档
+"----------------------------------------------------------------------
+if index(g:bundle_group, 'vimcdoc') >= 0
+	Plug 'yianwillis/vimcdoc'
+	set enc=utf-8
+	language message zh_CN.UTF-8
+endif
 
 "----------------------------------------------------------------------
 " 结束插件安装
