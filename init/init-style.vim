@@ -59,6 +59,8 @@ hi Visual                      ctermbg=238
 hi Delimiter       ctermfg=255
 " 设置注释颜色
 hi Comment         ctermfg=30
+" 去除匹配括号的背景色
+hi MatchParen      ctermfg=208  ctermbg=None cterm=bold
 
 
 "----------------------------------------------------------------------
