@@ -122,6 +122,12 @@ set errorformat+=[%f:%l]\ ->\ %m,[%f:%l]:%m
 " 设置分隔符可视
 set listchars=tab:\|\ ,trail:.,extends:>,precedes:<
 
+" 设置默认在下方分屏
+set splitbelow sb
+
+" 设置默认在右侧分屏
+set splitright sr
+
 
 " 设置 tags：当前文件所在目录往上向根目录搜索直到碰到 .tags 文件
 " 或者 Vim 当前目录包含 .tags 文件

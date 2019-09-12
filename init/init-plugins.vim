@@ -400,6 +400,17 @@ if index(g:bundle_group, 'ale') >= 0
 
 	let g:ale_linters.text = ['textlint', 'write-good', 'languagetool']
 
+	" 判断是否为Linux Kernel目录
+	if isdirectory("kernel/") && isdirectory("mm/") && isdirectory("arch/") && isdirectory("drivers/")
+		autocmd!  VimEnter * :ALEDisable
+	endif
+
+	for line in readfile("Makefile",'',1)
+		if line =~ "# Linux Kernel"
+			autocmd!  VimEnter * :ALEDisable
+		endif
+	endfor
+
 	" 如果没有 gcc 只有 clang 时（FreeBSD）
 	if executable('gcc') == 0 && executable('clang')
 		let g:ale_linters.c += ['clang']
@@ -539,6 +550,15 @@ if index(g:bundle_group, 'vimcdoc') >= 0
 	language message zh_CN.UTF-8
 endif
 
+Plug 'neomake/neomake'
+let g:neomake_open_list = 2
+let g:neomake_make_maker = {
+    \ 'exe': 'make',
+    \ 'args': [''],
+    \ 'errorformat': '%f:%l:%c: %m',
+    \ }
+
+let g:neomake_c_enabled_makers=["make"]
 "----------------------------------------------------------------------
 " 结束插件安装
 "----------------------------------------------------------------------
@@ -570,6 +590,8 @@ let g:ycm_semantic_triggers =  {
 			\ 'cs,lua,javascript': ['re!\w{2}'],
 			\ }
 
+
+call neomake#configure#automake('nrwi', 500)
 
 "----------------------------------------------------------------------
 " Ycm 白名单（非名单内文件不启用 YCM），避免打开个 1MB 的 txt 分析半天
