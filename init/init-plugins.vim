@@ -16,7 +16,7 @@
 if !exists('g:bundle_group')
 	let g:bundle_group = ['basic', 'tags', 'enhanced', 'filetypes', 'textobj']
 	let g:bundle_group += ['tags', 'airline', 'nerdtree', 'ale', 'echodoc']
-	let g:bundle_group += ['leaderf', 'YouCompleteMe', 'vimcdoc']
+	let g:bundle_group += ['leaderf', 'YouCompleteMe', 'vimcdoc', 'neomake']
 endif
 
 
@@ -405,11 +405,16 @@ if index(g:bundle_group, 'ale') >= 0
 		autocmd!  VimEnter * :ALEDisable
 	endif
 
-	for line in readfile("Makefile",'',1)
-		if line =~ "# Linux Kernel"
-			autocmd!  VimEnter * :ALEDisable
-		endif
-	endfor
+	if filereadable("Makefile")
+		for line in readfile("Makefile",'',1)
+			if line =~ "# Linux Kernel"
+				autocmd!  VimEnter * :ALEDisable
+			endif
+			if line =~ "# Linux Driver"
+				autocmd!  VimEnter * :ALEDisable
+			endif
+		endfor
+	endif
 
 	" 如果没有 gcc 只有 clang 时（FreeBSD）
 	if executable('gcc') == 0 && executable('clang')
@@ -550,15 +555,20 @@ if index(g:bundle_group, 'vimcdoc') >= 0
 	language message zh_CN.UTF-8
 endif
 
-Plug 'neomake/neomake'
-let g:neomake_open_list = 2
-let g:neomake_make_maker = {
-    \ 'exe': 'make',
-    \ 'args': [''],
-    \ 'errorformat': '%f:%l:%c: %m',
-    \ }
+"----------------------------------------------------------------------
+" neomake：Neovim / Vim的异步整理和make框架
+"----------------------------------------------------------------------
+if index(g:bundle_group, 'neomake') >= 0
+	Plug 'neomake/neomake'
+	let g:neomake_open_list = 2
+	let g:neomake_make_maker = {
+		\ 'exe': 'make',
+		\ 'args': [''],
+		\ 'errorformat': '%f:%l:%c: %m',
+		\ }
 
-let g:neomake_c_enabled_makers=["make"]
+	let g:neomake_c_enabled_makers=["make"]
+endif
 "----------------------------------------------------------------------
 " 结束插件安装
 "----------------------------------------------------------------------
@@ -590,7 +600,7 @@ let g:ycm_semantic_triggers =  {
 			\ 'cs,lua,javascript': ['re!\w{2}'],
 			\ }
 
-
+" 配置neomake
 call neomake#configure#automake('nrwi', 500)
 
 "----------------------------------------------------------------------
